@@ -56,8 +56,8 @@ SPECIAL_SYMBOLS = {
 
 
 PUNCTRUATION = [',', ';', '"', '!', '！', '，', '。', '；', '：', '’', '“', '？',
-                  '、', '?', '（', '）', '《', '》', '(', ')', '、', '<', '>', '_',
-                  '——', '+', '[', ']']
+        '、', '?', '（', '）', '《', '》', '(', ')', '、', '<', '>', '_',
+        '——', '+', '=', '[', ']']
 
 
 SINGLE_NUM_PATTERN = re.compile(r'(\d{3,20}-*)+\d{2,10}')
@@ -68,6 +68,9 @@ TIME_PATTERN = re.compile(r'(\d{1,2}:\d{2}[-~]\d{1,2}:\d{2})|(\d{1,2}:30)|(\d{1,
 
 PERCENTAGE_PATTERN = re.compile(r'\d+(\.\d+)*%')
 
+CALCULATE_PATTERN = re.compile(r'\d+(\.\d+)?([\+\-\*\/]\d+(\.\d+)?(\=\d+(\.\d+)?)?)+')
+
+ENG_LETTERS_PATTERN = re.compile(r'[a-zA-Z]+')
 
 def get_num_phones(num):
     phones = []
@@ -137,6 +140,17 @@ def get_percent_phones(percentage):
     phones.extend([NUM_DICT[n] for n in post if n in NUM_DICT])
     return phones
 
+def get_calculate_phones(formula):
+    phones = formula.replace('+', '加')
+    phones = phones.replace('-', '减')
+    phones = phones.replace('*', '乘')
+    phones = phones.replace('/', '除')
+    phones = phones.replace('.', '点')
+    phones = phones.replace('0', '零')
+    phones = phones.replace('2', '二')
+    phones = phones.replace('=', '等于')
+    return phones
+
 
 def get_special_phones(phrase):
     phones = []
@@ -149,6 +163,10 @@ def get_special_phones(phrase):
 
     if PERCENTAGE_PATTERN.match(phrase):
         return get_percent_phones(phrase)
+
+    if CALCULATE_PATTERN.match(phrase):
+        phones.extend(get_calculate_phones(phrase))
+        return phones
 
     if TIME_PATTERN.match(phrase):
         if '-' in phrase or '~' in phrase:
@@ -189,6 +207,10 @@ def get_special_phones(phrase):
             phones.extend(get_num_phones(num))
         return phones
 
+    if ENG_LETTERS_PATTERN.match(phrase):
+        for c in phrase:
+            phones.extend([c.lower(), ', '])
+
     return phones
 
 
@@ -214,9 +236,11 @@ def eliminate_duplicate_punctuation(text):
 
 def text_normalization(text):
     text = pattern_normalize(text, PERCENTAGE_PATTERN)
+    text = pattern_normalize(text, CALCULATE_PATTERN)
     text = pattern_normalize(text, TIME_PATTERN)
     text = pattern_normalize(text, SINGLE_NUM_PATTERN)
     text = pattern_normalize(text, PHRASE_NUM_PATTERN)
+    text = pattern_normalize(text, ENG_LETTERS_PATTERN)
     text = eliminate_duplicate_punctuation(text)
     return text
 

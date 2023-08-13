@@ -2,7 +2,7 @@ dataset: "AISHELL3"
 
 path:
   corpus_path: ""  # pre-wav-text-data, for preprocessing
-  lexicon_path: "lexicon/pinyin-lexicon-r.txt"
+  lexicon_path: "lexicon/pinyin-lexicon-r.txt,lexicon/pinyin-letters-lexicon.txt"
   phrase_phone_path: "lexicon/phrase_phones_dict.json"
   raw_path: "./raw_data/biaobei/"   # indir
   preprocessed_path: "./preprocessed_data/biaobei/"  # outdir

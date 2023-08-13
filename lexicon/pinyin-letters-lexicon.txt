@@ -1,0 +1,26 @@
+a ei1
+b b i4
+c s ei1
+d d i4
+e y i4
+f ai1 f u4
+g j i3
+h ei1 q v1
+i ai1
+j j ie2
+k k ei4
+l ei1 ou1
+m ai1 m u5
+n en1
+o o1
+p p i1
+q k i1 y u4
+r a4
+s ei1 s i1
+t t i4
+u y u1
+v w i1
+w d a1 b u1 y i1 u1
+x ai1 k e4 s
+y w ai4
+z r ei1

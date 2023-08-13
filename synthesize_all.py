@@ -20,13 +20,17 @@ print(f'####### device: {device} #######')
 
 def read_lexicon(lex_path):
     lexicon = {}
-    with open(lex_path) as f:
-        for line in f:
-            temp = re.split(r"\s+", line.strip("\n"))
-            word = temp[0]
-            phones = temp[1:]
-            if word.lower() not in lexicon:
-                lexicon[word.lower()] = phones
+
+    paths = lex_path.split(",")
+    for path in paths:
+
+        with open(path) as f:
+            for line in f:
+                temp = re.split(r"\s+", line.strip("\n"))
+                word = temp[0]
+                phones = temp[1:]
+                if word.lower() not in lexicon:
+                    lexicon[word.lower()] = phones
     return lexicon
 
 
@@ -404,6 +408,6 @@ if __name__ == "__main__":
     tts = SpeechSynthesis('./config/AISHELL3')
     while True:
         text = input("请输入文本：")
-        print(tts.text2speech(text))
+        print(tts.text2speech(text, "./"))
 
     pass
